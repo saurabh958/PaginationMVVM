@@ -11,14 +11,5 @@ import kotlinx.coroutines.launch
 
 class EmployeeViewModel(private val repository: EmployeeRepository): ViewModel()
 {
-    /*init {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.getEmployeeData(1)
-        }
-    }*/
-/*
-    val employee:LiveData<EmployeeData>
-    get() = repository.employee*/
-
     val list = repository.getEmployeData().cachedIn(viewModelScope)
 }

@@ -7,20 +7,16 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
-import com.bumptech.glide.Glide
 import com.example.pagination.adapters.EmployeeDataAdapter.MyViewHolder
 import com.example.pagination.databinding.ItemEmployeeDetailBinding
 import com.example.pagination.model.Data
-import com.example.pagination.model.EmployeeData
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
-class EmployeeDataAdapter: PagingDataAdapter<Data, MyViewHolder>(differCallback) {
+class EmployeeDataAdapter : PagingDataAdapter<Data, MyViewHolder>(differCallback) {
 
-    inner class MyViewHolder(val binding: ItemEmployeeDetailBinding):RecyclerView.ViewHolder(binding.root)
+    inner class MyViewHolder(val binding: ItemEmployeeDetailBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
-    companion object{
+    companion object {
         val differCallback = object : DiffUtil.ItemCallback<Data>() {
             override fun areItemsTheSame(oldItem: Data, newItem: Data): Boolean {
                 return oldItem.id == newItem.id
@@ -38,7 +34,7 @@ class EmployeeDataAdapter: PagingDataAdapter<Data, MyViewHolder>(differCallback)
             tvFullName.text = "${currentItem?.first_name ?: ""} ${currentItem?.last_name ?: ""}"
             tvEmail.text = currentItem?.email ?: ""
             val imagelink = currentItem?.avatar ?: ""
-            imgProfile.load(imagelink){
+            imgProfile.load(imagelink) {
                 crossfade(true)
                 crossfade(1000)
                 transformations(CircleCropTransformation())
@@ -47,6 +43,12 @@ class EmployeeDataAdapter: PagingDataAdapter<Data, MyViewHolder>(differCallback)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        return MyViewHolder(ItemEmployeeDetailBinding.inflate(LayoutInflater.from(parent.context),parent,false))
+        return MyViewHolder(
+            ItemEmployeeDetailBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 }
