@@ -9,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.pagination.adapters.EmployeeDataAdapter
 import com.example.pagination.databinding.ActivityMainBinding
 import com.example.pagination.repository.EmployeeRepository
 import com.example.pagination.retrofit.ApiInterface
@@ -21,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding : ActivityMainBinding
     lateinit var employeeViewModel:EmployeeViewModel
     private lateinit var recyclerView:RecyclerView
+    private lateinit var employeeDataAdapter: EmployeeDataAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,20 +37,27 @@ class MainActivity : AppCompatActivity() {
         employeeViewModel = ViewModelProvider(this,EmployeeViewModelFactory(repository))
             .get(EmployeeViewModel::class.java)
 
-        employeeViewModel.employee.observe(this, {
+        /*employeeViewModel.employee.observe(this, {
             Log.d("responsedata", it.data.toString())
             binding.tvCounter.text = it.total.toString()
+
+        })*/
+        employeeViewModel.list.observe(this, Observer {
+            employeeDataAdapter.submitData(lifecycle,it)
         })
 
 
     }
 
     private fun initRecyclerView() {
+        employeeDataAdapter = EmployeeDataAdapter()
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             val decoratn = DividerItemDecoration(applicationContext,DividerItemDecoration.VERTICAL)
             addItemDecoration(decoratn)
-            
+            setHasFixedSize(true)
+            adapter = employeeDataAdapter
+
         }
     }
 }
